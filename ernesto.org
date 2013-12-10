@@ -1,0 +1,19 @@
+* TODO [[file:Ernesto.lagda]]
+  SCHEDULED: <2013-12-09 Mon>
+** Box and ⟦⟧
+** Diamond, find
+* TODO [[file:Ernesto/Examples.lagda]]
+  SCHEDULED: <2013-12-09 Mon>
+** {Hancock, Ghani, Pattinson} - Stream Processor
+
+* TODO [[file:Ernesto/Cata.lagda]]
+** Parameterised catamorphism for μs
+** Initiality
+
+* TODO [[file:Ernesto/Elim.lagda]]
+** Elimination for μs
+
+* TODO [[file:Ernesto/Ana.lagda]]
+** Parameterised anamorphism for νs
+** Finality?
+
