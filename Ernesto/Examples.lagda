@@ -4,8 +4,8 @@
 {-# OPTIONS --copatterns --sized-types #-}
 module Ernesto.Examples where
 
-open import Mod.Base
-open import Ernesto
+open import AD
+open import Ernesto; open Sized
 \end{code}
 
 `N` is the carrier of the terminal coalgebra of the identity functor.
@@ -26,29 +26,27 @@ n : N
 \end{code}
 
 If we build another `N` in the same way Agda *decides* that it is
-*not* definitionally equal to `n`. As we would expect, `id-nm` does
-not typecheck.
+*not* definitionally equal to `n`: `id-nm` does not typecheck.
 
 \begin{code}
 m : N
 ] m [ = ↑ m
 
+open Manifest Z using (_∋_)
+
 -- id-nm : N ∋ n → N ∋ m
 -- id-nm = id
 \end{code}
 
-Let's see whether we can discriminate.
+Thanks to Abel's fix to bug 1271, we cannot discriminate anymore
+between `n` and `[ ↑ n ]`.
 
 \begin{code}
-biased-observation : ∀ {z : N} → z ≡ [ ↑ z ] → [0]
-biased-observation ()
+-- former-bug : {n : N} → n ≡ [ ↑ n ] → [0]
+-- former-bug ()
 \end{code}
 
-This is not very encouraging: the point is that I think that
-(compositions of) constructors for records that have an endo type
-should not be distinguisable from identity.
-
-Let's see some other examples.
+Streams and conatural numbers.
 
 \begin{code}
 StreamF : [1] ▻ [1]
