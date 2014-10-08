@@ -11,10 +11,10 @@ open import Ernesto; open Sized
 `N` is the carrier of the terminal coalgebra of the identity functor.
 
 \begin{code}
-NF : [1] ▻ [1]
+NF : ⊤Z ▻ ⊤Z
 NF = `ν (`I ∘ inr)
 
-N = ⟦ NF ⟧▻ (λ _ → [1]) ∞ _
+N = ⟦ NF ⟧▻ (λ _ → ⊤Z) ∞ _
 \end{code}
 
 `n` is an inhabitant of `N`. Observationally it is the unique element
@@ -49,7 +49,7 @@ between `n` and `[ ↑ n ]`.
 Streams and conatural numbers.
 
 \begin{code}
-StreamF : [1] ▻ [1]
+StreamF : ⊤Z ▻ ⊤Z
 StreamF = `ν λ _ → `I (inl _) `× `I (inr _)
 
 Stream : (A : Set) → Pow Size _

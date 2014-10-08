@@ -1,4 +1,4 @@
-# A universe of functors closed under μ and ν and monadic composition
+# A universe of functors closed under μ, ν and monadic composition
 
 \begin{code}
 {-# OPTIONS --copatterns --sized-types #-}
@@ -12,6 +12,7 @@ open import AD hiding (■)
 ## Syntax
 
 \begin{code}
+infix 5 _`×_
 infix 4 _`>>=_
 
 data Er (I : ★ lI) : ★ (S lI) where
@@ -28,6 +29,10 @@ data Er (I : ★ lI) : ★ (S lI) where
 infix 0 _▻_
 _▻_ = λ (I O : ★ lI) → O → Er I
 En = λ I → I ▻ I
+
+infix 5 _′×_
+_′×_ : ∀ {I O} → I ▻ O → I ▻ O → I ▻ O
+(L ′× R) o = L o `× R o
 \end{code}
 
 \begin{code}
@@ -144,9 +149,22 @@ module Sized where
   open ν public
 \end{code}
 
-## Predicate lifting
+\begin{code}
+  ⟦_⟧map : ∀ {I : Set lI}{lX lY}{X : Pow I lX}{Y : Pow I lY} → ∀ D →
+           (X ⇛ Y) → ∀ {z} → ⟦ D ⟧ X z → ⟦ D ⟧ Y z
+  ⟦_⟧map (`I i)     f   xs      = ↑ (f i (↓ xs))
+  ⟦_⟧map (`Σ S T)   f (s , t)   = s , ⟦ T s ⟧map f t
+  ⟦_⟧map (`Π S T)   f    g    s = ⟦ T s ⟧map f (g s)
+  ⟦_⟧map (`μ F x)   f [ xs ]    = [ ⟦ F x ⟧map ⊎.[ (λ i x → ↑ (f i (↓ x)))
+                                                 , (λ r → ⟦ `μ F r ⟧map f) ]   xs ]
+  ] ⟦_⟧map (`ν F x) f   xs [    =   ⟦ F x ⟧map ⊎.[ (λ i x → ↑ (f i (↓ x)))
+                                                 , (λ r → ⟦ `ν F r ⟧map f) ] ] xs [
+  ⟦_⟧map  `1        f   xs      = tt
+  ⟦_⟧map (L `× R)   f (ls , rs) = ⟦ L ⟧map f ls , ⟦ R ⟧map f rs
+  ⟦_⟧map (D `>>= F) f xs        = ⟦ D ⟧map (λ a → ⟦ F a ⟧map f) xs
+\end{code}
 
-### Box
+## Box
 
 \begin{code}
   module Box where
@@ -176,8 +194,6 @@ module Sized where
   open Box; open ■
 \end{code}
 
-### All
-
 \begin{code}
   ◽ : ∀ {I : Set lI}{lX}{X : Pow I lX}{lP}{P : Pow/ X lP}
         (m : Π _ P) → ∀ D {z} xs → □ D P {z} xs
@@ -193,17 +209,3 @@ module Sized where
   ◽   m (D `>>= F)          xs   = ◽ (uc λ j → ◽ m (F j)) D xs
 \end{code}
 
-\begin{code}
-  ⟦_⟧map : ∀ {I : Set lI}{lX lY}{X : Pow I lX}{Y : Pow I lY} → ∀ D → 
-           (X ⇛ Y) → ∀ {z} → ⟦ D ⟧ X z → ⟦ D ⟧ Y z
-  ⟦_⟧map (`I i)     f   xs      = ↑ (f i (↓ xs))
-  ⟦_⟧map (`Σ S T)   f (s , t)   = s , ⟦ T s ⟧map f t
-  ⟦_⟧map (`Π S T)   f    g    s = ⟦ T s ⟧map f (g s)
-  ⟦_⟧map (`μ F x)   f [ xs ]    = [ ⟦ F x ⟧map ⊎.[ (λ i x → ↑ (f i (↓ x)))
-                                                 , (λ r → ⟦ `μ F r ⟧map f) ]   xs ]
-  ] ⟦_⟧map (`ν F x) f   xs [    =   ⟦ F x ⟧map ⊎.[ (λ i x → ↑ (f i (↓ x)))
-                                                 , (λ r → ⟦ `ν F r ⟧map f) ] ] xs [
-  ⟦_⟧map  `1        f   xs      = tt
-  ⟦_⟧map (L `× R)   f (ls , rs) = ⟦ L ⟧map f ls , ⟦ R ⟧map f rs
-  ⟦_⟧map (D `>>= F) f xs        = ⟦ D ⟧map (λ a → ⟦ F a ⟧map f) xs
-\end{code}
