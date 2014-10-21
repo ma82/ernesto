@@ -132,12 +132,12 @@ module Sized where
     ⟦ `ν F r   ⟧ X z = ν F X r z
     ⟦ D `>>= F ⟧ X z = ⟦ D ⟧ (λ j → ⟦ F j ⟧ X z) z
 
-    data μ {I R}(F : (I ⊎ R) ▻ R){lX}(X : Pow I lX)(r : R)
-           : Size → Set (lI ⊔ lX) where
-      [_] : {z : Size} → ⟦ %μ F r ⟧ X z → μ F X r (⇑ z)
+    data μ {I R}(F : (I ⊎ R) ▻ R){lX}(X : Pow I lX)(r : R)(s : Size)
+           : Set (lI ⊔ lX) where
+      [_] : {z : Size< s} → ⟦ %μ F r ⟧ X z → μ F X r s
 
-    record ν {I R}(F : (I ⊎ R) ▻ R){lX}(X : Pow I lX)(r : R)
-           (s : Size) : Set (lI ⊔ lX) where
+    record ν {I R}(F : (I ⊎ R) ▻ R){lX}(X : Pow I lX)(r : R)(s : Size)
+             : Set (lI ⊔ lX) where
       coinductive
       constructor [_] 
       field       ]_[ : {z : Size< s} → ⟦ %ν F r ⟧ X z
