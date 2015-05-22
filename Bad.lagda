@@ -21,7 +21,7 @@ Agda           - Empty
 \end{code}
 
 \begin{code}
--- x : ⟦ μA,A _ ⟧ ⊥Z/ ∞
+-- x : ∀ {z} → ⟦ μA,A _ ⟧ ⊥Z/ z
 -- x = [ ↑ x ]
 \end{code}
 
@@ -42,7 +42,7 @@ Agda           - Inhabited
 
 \begin{code}
 x : ⟦ νA,A _ ⟧ ⊥Z/ ∞
-↓ ] x [ = x
+Lev.↓ ] x [ = x
 \end{code}
 
 TODO. Tag the different variables by using manifests instead of `⊤Z`
@@ -51,6 +51,7 @@ TODO. Tag the different variables by using manifests instead of `⊤Z`
 
 My expectation - Inhabited
 Agda           - I cannot inhabit, I cannot prove empty
+                 (but maybe I just don't know how to do this)
 
 \begin{code}
 νA,μB,A : En ⊤Z
@@ -59,7 +60,7 @@ Agda           - I cannot inhabit, I cannot prove empty
 -- ex2 : ∀ {z} → ⟦ νA,μB,A _ ⟧ ⊥Z/ z
 -- xe2 : ∀ {z} → ⟦ %ν (`μ (`I ∘ inl ∘ inr)) tt ⟧ ⊥Z/ z
 -- ] ex2 [ {z} = xe2
--- xe2     {z} = {!!}
+-- xe2     {z} = ?
 \end{code}
 
 \begin{code}
@@ -103,3 +104,5 @@ ex     = [ xe ]
 IIRC in the Altenkirch-Danielsson DTP 2010 paper there is 
 
 `μ A. ν B. 1 + A × B`
+
+See also https://code.google.com/p/agda/issues/detail?id=1318

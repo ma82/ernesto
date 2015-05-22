@@ -69,13 +69,13 @@ _✴ : ∀ {I} → En I → I ⊎ I ▻ I
 _`∘_ : {A B C : ★ lI} → B ▻ C → A ▻ B → A ▻ C
 (F `∘ G) a = F a `>>= G
 
-`_[_] : {I J K : ★ lI} → (I ⊎ K ▻ J) → (I ▻ K) → I ▻ J
+`_[_] : {I J K : ★ lI} → I ⊎ K ▻ J → I ▻ K → I ▻ J
 ` F [ G ] = F `∘ ⊎.[ `I , G ]
 
-%μ : {I J : ★ lI} → (I ⊎ J ▻ J) → I ▻ J
+%μ : {I J : ★ lI} → I ⊎ J ▻ J → I ▻ J
 %μ F = ` F [ `μ F ]
 
-%ν : {I J : ★ lI} → (I ⊎ J ▻ J) → I ▻ J
+%ν : {I J : ★ lI} → I ⊎ J ▻ J → I ▻ J
 %ν F = ` F [ `ν F ]
 \end{code}
 
@@ -155,9 +155,9 @@ module Sized where
   ⟦_⟧map (`I i)     f   xs      = ↑ (f i (↓ xs))
   ⟦_⟧map (`Σ S T)   f (s , t)   = s , ⟦ T s ⟧map f t
   ⟦_⟧map (`Π S T)   f    g    s = ⟦ T s ⟧map f (g s)
-  ⟦_⟧map (`μ F x)   f [ xs ]    = [ ⟦ F x ⟧map ⊎.[ (λ i x → ↑ (f i (↓ x)))
+  ⟦_⟧map (`μ F x)   f [ xs ]    = [ ⟦ F x ⟧map ⊎.[ (λ i x → ↑ f i (↓ x))
                                                  , (λ r → ⟦ `μ F r ⟧map f) ]   xs ]
-  ] ⟦_⟧map (`ν F x) f   xs [    =   ⟦ F x ⟧map ⊎.[ (λ i x → ↑ (f i (↓ x)))
+  ] ⟦_⟧map (`ν F x) f   xs [    =   ⟦ F x ⟧map ⊎.[ (λ i x → ↑ f i (↓ x))
                                                  , (λ r → ⟦ `ν F r ⟧map f) ] ] xs [
   ⟦_⟧map  `1        f   xs      = tt
   ⟦_⟧map (L `× R)   f (ls , rs) = ⟦ L ⟧map f ls , ⟦ R ⟧map f rs
@@ -201,7 +201,7 @@ module Sized where
   ◽   m (`1      )          xs   = tt
   ◽   m (L `× R  )      (l , r)  = ◽ m L l , ◽ m R r
 
-  ◽   m (`I i    )          xs   = ↑ (m (i , ↓ xs))
+  ◽   m (`I i    )          xs   = ↑ (m (i , (↓ xs)))
   ◽   m (`Σ S T  )      (s , t)  = ◽ m (T s) t
   ◽   m (`Π S T  )           f   = λ s → ◽ m (T s) (f s)
   ◽   m (`μ F r  ) ([_] {z} xs)  = ◽ m (%μ F r) {z} xs
